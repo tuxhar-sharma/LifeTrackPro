@@ -12,7 +12,14 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-lifetrack-pro-production-s
 
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv(
+        'ALLOWED_HOSTS',
+        'localhost,127.0.0.1,.vercel.app,.onrender.com,.railway.app'
+    ).split(',')
+    if h.strip()
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -39,6 +46,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -106,6 +114,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -139,5 +148,8 @@ SIMPLE_JWT = {
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
     o.strip() for o in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',') if o.strip()
+]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
 ]
 CORS_ALLOW_CREDENTIALS = True
