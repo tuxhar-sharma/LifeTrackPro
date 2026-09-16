@@ -6,6 +6,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ExpensesPage } from './pages/ExpensesPage';
 import { HabitsPage } from './pages/HabitsPage';
+import { LandingPage } from './pages/LandingPage';
 import { AppShell } from './components/layout/AppShell';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -82,9 +83,11 @@ export const App: React.FC = () => {
             <Route path="habits" element={<HabitsPage />} />
           </Route>
 
-          {/* Root redirect */}
-          <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/app/dashboard" replace />} />
+          {/* Public Marketing Landing Page */}
+          <Route path="/" element={<LandingPage />} />
+
+          {/* Catch-all fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
