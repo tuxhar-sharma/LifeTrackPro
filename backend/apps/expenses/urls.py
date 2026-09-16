@@ -1,0 +1,20 @@
+from django.urls import path
+from .views import (
+    ExpenseCategoryListCreateView,
+    ExpenseCategoryDetailView,
+    ExpenseListCreateView,
+    ExpenseDetailView,
+    BudgetListCreateView,
+    BudgetDetailView,
+    ExpenseSummaryView,
+)
+
+urlpatterns = [
+    path('categories/', ExpenseCategoryListCreateView.as_view(), name='expense-category-list-create'),
+    path('categories/<uuid:pk>/', ExpenseCategoryDetailView.as_view(), name='expense-category-detail'),
+    path('', ExpenseListCreateView.as_view(), name='expense-list-create'),
+    path('<uuid:pk>/', ExpenseDetailView.as_view(), name='expense-detail'),
+    path('budgets/', BudgetListCreateView.as_view(), name='budget-list-create'),
+    path('budgets/<uuid:pk>/', BudgetDetailView.as_view(), name='budget-detail'),
+    path('summary/', ExpenseSummaryView.as_view(), name='expense-summary'),
+]
