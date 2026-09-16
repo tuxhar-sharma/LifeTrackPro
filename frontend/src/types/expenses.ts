@@ -32,6 +32,7 @@ export interface Expense {
 export interface CreateExpensePayload {
   category?: string;
   amount: string | number;
+  currency?: string;
   merchant_name: string;
   transaction_date: string;
   payment_method?: string;

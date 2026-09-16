@@ -16,6 +16,7 @@ import { expenseService } from '../services/expenseService';
 import { habitService } from '../services/habitService';
 import type { ExpenseSummary } from '../types/expenses';
 import type { Habit, HabitStats } from '../types/habits';
+import { formatCurrency, getStoredCurrency } from '../utils/currency';
 
 export const DashboardPage: React.FC = () => {
   const [summary, setSummary] = useState<ExpenseSummary | null>(null);
@@ -114,7 +115,7 @@ export const DashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Monthly Spend"
-          value={`$${totalSpent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          value={formatCurrency(totalSpent, getStoredCurrency())}
           subtitle={`${expenseCount} transactions recorded`}
           icon={<DollarSign className="w-5 h-5" />}
           trend="Month to Date"
@@ -264,7 +265,7 @@ export const DashboardPage: React.FC = () => {
                         </span>
                       </div>
                       <span className="font-semibold text-white">
-                        ${cat.total.toFixed(2)} ({cat.percentage}%)
+                        {formatCurrency(cat.total, getStoredCurrency())} ({cat.percentage}%)
                       </span>
                     </div>
                     <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -284,7 +285,7 @@ export const DashboardPage: React.FC = () => {
 
           <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
             <span>Total Filtered Volume</span>
-            <span className="font-bold text-white">${totalSpent.toFixed(2)}</span>
+            <span className="font-bold text-white">{formatCurrency(totalSpent, getStoredCurrency())}</span>
           </div>
         </div>
       </div>
@@ -347,7 +348,7 @@ export const DashboardPage: React.FC = () => {
                     <td className="py-3 px-3 text-slate-400">{exp.transaction_date}</td>
                     <td className="py-3 px-3 text-slate-400 capitalize">{exp.payment_method.replace('_', ' ')}</td>
                     <td className="py-3 px-3 text-right font-semibold text-white">
-                      ${exp.amount_display.toFixed(2)}
+                      {formatCurrency(exp.amount_display, exp.currency || getStoredCurrency())}
                     </td>
                   </tr>
                 ))

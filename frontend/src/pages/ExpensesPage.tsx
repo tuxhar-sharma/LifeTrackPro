@@ -3,19 +3,29 @@ import {
   Plus,
   Search,
   Trash2,
-  DollarSign,
   TrendingDown,
-  Tag
+  Tag,
+  Coins
 } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
 import { expenseService } from '../services/expenseService';
 import type { Expense, ExpenseCategory, Budget } from '../types/expenses';
+import {
+  CURRENCIES,
+  getStoredCurrency,
+  setStoredCurrency,
+  formatCurrency,
+  getCurrencySymbol
+} from '../utils/currency';
 
 export const ExpensesPage: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Currency Selection
+  const [currentCurrency, setCurrentCurrency] = useState<string>(getStoredCurrency);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -27,6 +37,7 @@ export const ExpensesPage: React.FC = () => {
 
   // New Expense Form State
   const [amount, setAmount] = useState('');
+  const [expenseCurrency, setExpenseCurrency] = useState<string>(getStoredCurrency);
   const [merchant, setMerchant] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -75,9 +86,20 @@ export const ExpensesPage: React.FC = () => {
     loadData();
   }, [selectedCategory]);
 
+  const handleCurrencyChange = (newCode: string) => {
+    setCurrentCurrency(newCode);
+    setStoredCurrency(newCode);
+    setExpenseCurrency(newCode);
+  };
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     loadData();
+  };
+
+  const handleOpenAddExpense = () => {
+    setExpenseCurrency(currentCurrency);
+    setIsModalOpen(true);
   };
 
   const handleCreateExpense = async (e: React.FormEvent) => {
@@ -88,6 +110,7 @@ export const ExpensesPage: React.FC = () => {
       setSubmitting(true);
       await expenseService.createExpense({
         amount: parseFloat(amount),
+        currency: expenseCurrency,
         merchant_name: merchant,
         category: categoryId || undefined,
         transaction_date: date,
@@ -156,7 +179,24 @@ export const ExpensesPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Currency Switcher Selector */}
+          <div className="flex items-center gap-2 bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 shadow-sm">
+            <Coins className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+            <span className="text-[11px] uppercase font-semibold text-slate-400">Currency:</span>
+            <select
+              value={currentCurrency}
+              onChange={(e) => handleCurrencyChange(e.target.value)}
+              className="bg-transparent font-bold text-xs text-white focus:outline-none cursor-pointer pr-1"
+            >
+              {CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code} className="bg-slate-900 text-white">
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <button
             onClick={() => setIsBudgetModalOpen(true)}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition-all cursor-pointer"
@@ -164,8 +204,9 @@ export const ExpensesPage: React.FC = () => {
             <TrendingDown className="w-3.5 h-3.5 text-emerald-400" />
             Set Budget
           </button>
+
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenAddExpense}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
@@ -210,10 +251,10 @@ export const ExpensesPage: React.FC = () => {
 
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>
-                  Spent: <b className="text-white">${b.spent_display.toFixed(2)}</b>
+                  Spent: <b className="text-white">{formatCurrency(b.spent_display, currentCurrency)}</b>
                 </span>
                 <span>
-                  Limit: <b className="text-white">${b.limit_display.toFixed(2)}</b>
+                  Limit: <b className="text-white">{formatCurrency(b.limit_display, currentCurrency)}</b>
                 </span>
               </div>
             </div>
@@ -242,7 +283,7 @@ export const ExpensesPage: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-slate-300 px-3 py-2 focus:outline-none focus:border-indigo-500"
+              className="bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-slate-300 px-3 py-2 focus:outline-none focus:border-indigo-500 cursor-pointer"
             >
               <option value="">All Categories</option>
               {categories.map((c) => (
@@ -254,7 +295,7 @@ export const ExpensesPage: React.FC = () => {
           </div>
 
           <div className="pl-3 border-l border-slate-800 text-xs text-slate-400">
-            Filtered Total: <b className="text-white">${totalSpent.toFixed(2)}</b>
+            Filtered Total: <b className="text-white">{formatCurrency(totalSpent, currentCurrency)}</b>
           </div>
         </div>
       </div>
@@ -312,7 +353,7 @@ export const ExpensesPage: React.FC = () => {
                       {exp.notes || '—'}
                     </td>
                     <td className="py-3.5 px-4 text-right font-semibold text-white">
-                      ${exp.amount_display.toFixed(2)}
+                      {formatCurrency(exp.amount_display, exp.currency || currentCurrency)}
                     </td>
                     <td className="py-3.5 px-4 text-center">
                       <button
@@ -338,24 +379,45 @@ export const ExpensesPage: React.FC = () => {
         title="Record New Financial Transaction"
       >
         <form onSubmit={handleCreateExpense} className="space-y-4">
-          <div>
-            <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Amount ($ USD)
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                <DollarSign className="w-4 h-4" />
+          <div className="grid grid-cols-3 gap-3">
+            {/* Currency Option */}
+            <div className="col-span-1">
+              <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                Currency
+              </label>
+              <select
+                value={expenseCurrency}
+                onChange={(e) => setExpenseCurrency(e.target.value)}
+                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer font-medium"
+              >
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code} className="bg-slate-900 text-white">
+                    {c.code} ({c.symbol})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Amount Input */}
+            <div className="col-span-2">
+              <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+                Amount ({getCurrencySymbol(expenseCurrency)})
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
+                  {getCurrencySymbol(expenseCurrency)}
+                </div>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  required
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="45.50"
+                  className="w-full pl-8 pr-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                />
               </div>
-              <input
-                type="number"
-                step="0.01"
-                min="0.01"
-                required
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="45.50"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
-              />
             </div>
           </div>
 
@@ -368,7 +430,7 @@ export const ExpensesPage: React.FC = () => {
               required
               value={merchant}
               onChange={(e) => setMerchant(e.target.value)}
-              placeholder="Whole Foods / GitHub / Local Cafe"
+              placeholder="Whole Foods / Amazon / Local Cafe"
               className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
             />
           </div>
@@ -381,7 +443,7 @@ export const ExpensesPage: React.FC = () => {
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -400,7 +462,7 @@ export const ExpensesPage: React.FC = () => {
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
               />
             </div>
           </div>
@@ -412,10 +474,11 @@ export const ExpensesPage: React.FC = () => {
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
             >
               <option value="credit_card">Credit Card</option>
               <option value="debit_card">Debit Card</option>
+              <option value="upi">UPI / Instant Pay</option>
               <option value="bank_transfer">Bank Transfer</option>
               <option value="cash">Cash</option>
             </select>
@@ -429,7 +492,7 @@ export const ExpensesPage: React.FC = () => {
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Tax deductible, project expense, etc."
+              placeholder="Tax deductible, recurring subscription, etc."
               className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
             />
           </div>
@@ -467,7 +530,7 @@ export const ExpensesPage: React.FC = () => {
             <select
               value={budgetCategory}
               onChange={(e) => setBudgetCategory(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -479,11 +542,11 @@ export const ExpensesPage: React.FC = () => {
 
           <div>
             <label className="block text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-              Monthly Limit ($ USD)
+              Monthly Limit ({getCurrencySymbol(currentCurrency)})
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-                <DollarSign className="w-4 h-4" />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
+                {getCurrencySymbol(currentCurrency)}
               </div>
               <input
                 type="number"
@@ -493,7 +556,7 @@ export const ExpensesPage: React.FC = () => {
                 value={budgetLimit}
                 onChange={(e) => setBudgetLimit(e.target.value)}
                 placeholder="500"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
+                className="w-full pl-8 pr-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500"
               />
             </div>
           </div>
@@ -508,7 +571,7 @@ export const ExpensesPage: React.FC = () => {
                 required
                 value={budgetStart}
                 onChange={(e) => setBudgetStart(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
               />
             </div>
 
@@ -521,7 +584,7 @@ export const ExpensesPage: React.FC = () => {
                 required
                 value={budgetEnd}
                 onChange={(e) => setBudgetEnd(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500 cursor-pointer"
               />
             </div>
           </div>
