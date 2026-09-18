@@ -8,6 +8,7 @@ import { ExpensesPage } from './pages/ExpensesPage';
 import { HabitsPage } from './pages/HabitsPage';
 import { LandingPage } from './pages/LandingPage';
 import { AppShell } from './components/layout/AppShell';
+import { RouteTitleSynchronizer } from './components/layout/RouteTitleSynchronizer';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -49,6 +50,7 @@ export const App: React.FC = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <RouteTitleSynchronizer />
         <Routes>
           {/* Public Auth Routes */}
           <Route

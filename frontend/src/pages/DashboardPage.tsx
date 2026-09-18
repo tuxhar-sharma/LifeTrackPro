@@ -17,8 +17,10 @@ import { habitService } from '../services/habitService';
 import type { ExpenseSummary } from '../types/expenses';
 import type { Habit, HabitStats } from '../types/habits';
 import { formatCurrency, getStoredCurrency } from '../utils/currency';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const DashboardPage: React.FC = () => {
+  useDocumentTitle('Dashboard');
   const [summary, setSummary] = useState<ExpenseSummary | null>(null);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [habitStats, setHabitStats] = useState<HabitStats | null>(null);

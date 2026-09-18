@@ -17,8 +17,10 @@ import {
   formatCurrency,
   getCurrencySymbol
 } from '../utils/currency';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const ExpensesPage: React.FC = () => {
+  useDocumentTitle('Financial Ledger');
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([]);

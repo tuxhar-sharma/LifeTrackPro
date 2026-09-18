@@ -11,8 +11,10 @@ import {
 import { Modal } from '../components/ui/Modal';
 import { habitService } from '../services/habitService';
 import type { Habit, HabitStats } from '../types/habits';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const HabitsPage: React.FC = () => {
+  useDocumentTitle('Discipline & Habits');
   const [habits, setHabits] = useState<Habit[]>([]);
   const [stats, setStats] = useState<HabitStats | null>(null);
   const [loading, setLoading] = useState(true);

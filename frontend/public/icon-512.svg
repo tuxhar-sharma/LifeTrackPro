@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07090e" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="brandGrad512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="boltGrad512" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e0e7ff" />
+    </linearGradient>
+    <filter id="pwaGlow512" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Maskable full-bleed background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad512)" />
+
+  <!-- Inner Brand Container -->
+  <rect x="56" y="56" width="400" height="400" rx="88" fill="url(#brandGrad512)" stroke="rgba(255, 255, 255, 0.18)" stroke-width="6" />
+
+  <!-- Telemetry pulse backdrop -->
+  <path d="M56 256 H150 L192 192 L240 320 L288 224 L336 272 L378 256 H456" stroke="rgba(255, 255, 255, 0.22)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Dynamic Zap Icon -->
+  <path d="M280 100 L166 260 H260 L236 404 L358 244 L264 244 L280 100 Z" fill="url(#boltGrad512)" filter="url(#pwaGlow512)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+
+  <!-- Accent Spark -->
+  <circle cx="384" cy="128" r="18" fill="#38bdf8" />
+</svg>

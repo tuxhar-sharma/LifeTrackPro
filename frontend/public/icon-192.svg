@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07090e" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e0e7ff" />
+    </linearGradient>
+    <filter id="pwaGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Solid background for maskable PWA display -->
+  <rect width="192" height="192" rx="40" fill="url(#bgGrad)" />
+
+  <!-- Inner Brand Container -->
+  <rect x="20" y="20" width="152" height="152" rx="34" fill="url(#brandGrad)" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2" />
+
+  <!-- Telemetry pulse backdrop -->
+  <path d="M20 96 H56 L72 72 L90 120 L108 84 L126 102 L142 96 H172" stroke="rgba(255, 255, 255, 0.22)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Dynamic Zap Icon -->
+  <path d="M104 38 L62 98 H98 L89 152 L134 92 L98 92 L104 38 Z" fill="url(#boltGrad)" filter="url(#pwaGlow)" stroke="#ffffff" stroke-width="1" stroke-linejoin="round" />
+
+  <!-- Accent Spark -->
+  <circle cx="144" cy="48" r="7" fill="#38bdf8" />
+</svg>

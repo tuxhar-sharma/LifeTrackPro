@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Zap, AlertCircle, ArrowRight, Lock, Mail, User } from 'lucide-react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const RegisterPage: React.FC = () => {
+  useDocumentTitle('Create Account');
   const { register } = useAuth();
   const navigate = useNavigate();
 

@@ -1,32 +1,49 @@
-# React + TypeScript + Vite
+# LifeTrack Pro — Web Telemetry Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The official high-performance frontend client for **LifeTrack Pro**, unifying double-entry financial ledgering with atomic habit discipline.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ⚡ Core Architecture
 
-## React Compiler
+- **Framework:** React 19 + TypeScript + Vite
+- **Styling:** Tailwind CSS v4 (Deep Telemetry Dark Palette `#07090e`)
+- **Typography:** Inter (Primary UI) & JetBrains Mono (Financial Telemetry)
+- **Routing:** React Router v7 with dynamic page title synchronization (`useDocumentTitle` & `RouteTitleSynchronizer`)
+- **Icons:** Lucide React
+- **API Transport:** Axios with automatic JWT Bearer injection & silent token refresh
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### Prerequisites
+- Node.js 18+ (Node 20+ recommended)
+- npm or pnpm
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+### Development Server
+```bash
+npm install
+npm run dev
+```
+The client will start at `http://localhost:5173`.
+
+### Production Build
+```bash
+npm run build
+```
+Generates type-checked, minified production assets in `dist/`.
+
+### Linting
+```bash
+npm run lint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+## 🛡️ Brand Standards
+
+All views strictly conform to the LifeTrack Pro brand standard:
+- **Title Format:** `LifeTrack Pro | <View Name>`
+- **Color Identity:** Obsidian (`#07090e`), Indigo (`#6366f1`), Emerald (`#10b981`), Cyan (`#38bdf8`)
+- **PWA Ready:** Web App Manifest configured for standalone installability on iOS and Android.

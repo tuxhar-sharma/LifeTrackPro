@@ -16,8 +16,10 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export const LandingPage: React.FC = () => {
+  useDocumentTitle('High-Performance Life & Financial Telemetry');
   const { isAuthenticated } = useAuth();
 
   // Interactive playground state on landing page
