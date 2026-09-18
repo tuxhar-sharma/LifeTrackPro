@@ -7,6 +7,7 @@ interface StatCardProps {
   icon: React.ReactNode;
   trend?: string;
   trendPositive?: boolean;
+  color?: string;
 }
 
 export const StatCard: React.FC<StatCardProps> = ({

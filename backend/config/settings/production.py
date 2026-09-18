@@ -1,6 +1,11 @@
+import os
+from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
 DEBUG = False
+
+if not os.getenv('SECRET_KEY') or os.getenv('SECRET_KEY') == 'django-insecure-lifetrack-pro-production-secret-key-fallback':
+    raise ImproperlyConfigured("CRITICAL: The SECRET_KEY environment variable must be set in production.")
 
 CORS_ALLOW_ALL_ORIGINS = False
 

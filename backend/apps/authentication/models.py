@@ -54,6 +54,10 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     mfa_enabled = models.BooleanField(default=False)
     mfa_secret = models.CharField(max_length=128, blank=True, null=True)
 
+    avatar_url = models.URLField(max_length=500, blank=True, default='')
+    password_reset_token = models.CharField(max_length=128, blank=True, null=True)
+    password_reset_sent_at = models.DateTimeField(null=True, blank=True)
+
     failed_login_attempts = models.PositiveIntegerField(default=0)
     locked_until = models.DateTimeField(null=True, blank=True)
     last_login_at = models.DateTimeField(null=True, blank=True)

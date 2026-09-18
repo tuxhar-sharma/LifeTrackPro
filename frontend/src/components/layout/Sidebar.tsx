@@ -3,14 +3,21 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   ReceiptText,
+  TrendingUp,
   Flame,
+  BarChart3,
   Zap,
   Sparkles,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onCloseMobile?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
   const { user, logout } = useAuth();
 
   const navItems = [
@@ -25,28 +32,49 @@ export const Sidebar: React.FC = () => {
       icon: <ReceiptText className="w-5 h-5" />,
     },
     {
+      to: '/app/income',
+      label: 'Income Streams',
+      icon: <TrendingUp className="w-5 h-5" />,
+    },
+    {
       to: '/app/habits',
       label: 'Discipline & Habits',
       icon: <Flame className="w-5 h-5" />,
     },
+    {
+      to: '/app/analytics',
+      label: 'Financial Analytics',
+      icon: <BarChart3 className="w-5 h-5" />,
+    },
   ];
 
   return (
-    <aside className="w-64 bg-slate-950/80 border-r border-slate-800/80 flex flex-col justify-between p-4 shrink-0">
+    <aside className="w-64 bg-slate-950/95 border-r border-slate-800/80 flex flex-col justify-between p-4 shrink-0 h-full">
       <div>
         {/* Brand Header */}
-        <div className="flex items-center gap-3 px-3 py-4 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <Zap className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between px-3 py-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="font-bold text-base text-white tracking-tight leading-tight">
+                LifeTrack <span className="text-indigo-400">Pro</span>
+              </h1>
+              <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                Telemetry OS
+              </span>
+            </div>
           </div>
-          <div>
-            <h1 className="font-bold text-base text-white tracking-tight leading-tight">
-              LifeTrack <span className="text-indigo-400">Pro</span>
-            </h1>
-            <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
-              Telemetry OS
-            </span>
-          </div>
+
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
@@ -55,6 +83,7 @@ export const Sidebar: React.FC = () => {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={onCloseMobile}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   isActive
@@ -87,7 +116,7 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={logout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all cursor-pointer"
         >
           <LogOut className="w-3.5 h-3.5" />
           Sign Out

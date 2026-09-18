@@ -8,8 +8,9 @@ const ROUTE_TITLES: Record<string, string> = {
   '/app': 'LifeTrack Pro | Dashboard',
   '/app/dashboard': 'LifeTrack Pro | Dashboard',
   '/app/expenses': 'LifeTrack Pro | Financial Ledger',
+  '/app/income': 'LifeTrack Pro | Income & Inflow Streams',
   '/app/habits': 'LifeTrack Pro | Discipline & Habits',
-  '/app/analytics': 'LifeTrack Pro | Analytics',
+  '/app/analytics': 'LifeTrack Pro | Financial Analytics & Cash Flow',
   '/app/settings': 'LifeTrack Pro | Settings',
 };
 
