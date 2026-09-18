@@ -1,5 +1,6 @@
 import pytest
 from datetime import date
+from django.utils import timezone
 from rest_framework.test import APIClient
 from rest_framework import status
 from apps.authentication.models import User
@@ -76,19 +77,20 @@ class TestExpenses:
             name="Subscriptions",
             color_hex="#6366F1"
         )
+        today = timezone.now().date()
         Expense.objects.create(
             user=self.user,
             category=category,
             amount_cents=1500,
             merchant_name="Spotify",
-            transaction_date=date.today()
+            transaction_date=today
         )
         Expense.objects.create(
             user=self.user,
             category=category,
             amount_cents=2000,
             merchant_name="GitHub Copilot",
-            transaction_date=date.today()
+            transaction_date=today
         )
         response = self.client.get('/api/v1/expenses/summary/')
         assert response.status_code == status.HTTP_200_OK

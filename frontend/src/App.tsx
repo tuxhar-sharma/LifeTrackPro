@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { AppShell } from './components/layout/AppShell';
 import { RouteTitleSynchronizer } from './components/layout/RouteTitleSynchronizer';
@@ -22,7 +23,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-[#07090e] flex items-center justify-center">
+      <div className="h-screen w-screen bg-slate-50 dark:bg-[#07090e] flex items-center justify-center transition-colors">
         <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -40,7 +41,7 @@ const PublicOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-[#07090e] flex items-center justify-center">
+      <div className="h-screen w-screen bg-slate-50 dark:bg-[#07090e] flex items-center justify-center transition-colors">
         <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -56,10 +57,11 @@ const PublicOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) 
 export const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <ToastProvider>
-          <BrowserRouter>
-            <RouteTitleSynchronizer />
+      <ThemeProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <BrowserRouter>
+              <RouteTitleSynchronizer />
             <Suspense fallback={<PageSkeleton />}>
               <Routes>
                 {/* Public Auth Routes */}
@@ -107,7 +109,8 @@ export const App: React.FC = () => {
           </BrowserRouter>
         </ToastProvider>
       </AuthProvider>
-    </ErrorBoundary>
+    </ThemeProvider>
+  </ErrorBoundary>
   );
 };
 

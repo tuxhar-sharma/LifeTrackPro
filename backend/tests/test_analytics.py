@@ -51,8 +51,8 @@ class TestAnalytics:
         assert data['cash_flow_status'] == 'positive'
 
     def test_financial_health_score(self):
-        from datetime import date
-        today = date.today()
+        from django.utils import timezone
+        today = timezone.now().date()
         # Create income and expense with healthy savings
         source = IncomeSource.objects.create(user=self.user, name='Salary', stream_type='salary')
         Income.objects.create(

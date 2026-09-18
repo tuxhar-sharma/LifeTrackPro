@@ -7,7 +7,7 @@ export const AppShell: React.FC = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#07090e] text-slate-100">
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#07090e] text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* Desktop Persistent Sidebar */}
       <div className="hidden lg:block h-full shrink-0">
         <Sidebar />
@@ -17,10 +17,11 @@ export const AppShell: React.FC = () => {
       {mobileNavOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-xs transition-opacity"
             onClick={() => setMobileNavOpen(false)}
+            aria-hidden="true"
           />
-          <div className="relative z-10 w-64 max-w-[80vw] h-full shadow-2xl">
+          <div className="relative z-10 w-64 max-w-[80vw] h-full shadow-2xl animate-in slide-in-from-left duration-200">
             <Sidebar onCloseMobile={() => setMobileNavOpen(false)} />
           </div>
         </div>
@@ -29,7 +30,7 @@ export const AppShell: React.FC = () => {
       {/* Main Content Viewport */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header onOpenMobile={() => setMobileNavOpen(true)} />
-        <main className="flex-1 overflow-y-auto bg-gradient-to-b from-[#07090e] to-[#0c101d]">
+        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-gradient-to-b dark:from-[#07090e] dark:to-[#0c101d] transition-colors duration-200">
           <Outlet />
         </main>
       </div>

@@ -48,28 +48,28 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const getIcon = (type: ToastType) => {
     switch (type) {
       case 'success':
-        return <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />;
+        return <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />;
       case 'error':
-        return <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />;
+        return <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />;
       case 'warning':
-        return <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />;
+        return <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />;
       case 'info':
       default:
-        return <Info className="w-5 h-5 text-indigo-400 shrink-0" />;
+        return <Info className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />;
     }
   };
 
-  const getBorderColor = (type: ToastType) => {
+  const getStyles = (type: ToastType) => {
     switch (type) {
       case 'success':
-        return 'border-emerald-500/30 bg-emerald-950/40';
+        return 'border-emerald-500/30 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white shadow-emerald-500/10';
       case 'error':
-        return 'border-rose-500/30 bg-rose-950/40';
+        return 'border-rose-500/30 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white shadow-rose-500/10';
       case 'warning':
-        return 'border-amber-500/30 bg-amber-950/40';
+        return 'border-amber-500/30 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white shadow-amber-500/10';
       case 'info':
       default:
-        return 'border-indigo-500/30 bg-indigo-950/40';
+        return 'border-indigo-500/30 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white shadow-indigo-500/10';
     }
   };
 
@@ -81,20 +81,21 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-300 transform translate-y-0 ${getBorderColor(
+            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-300 transform translate-y-0 ${getStyles(
               t.type
             )}`}
           >
             {getIcon(t.type)}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white tracking-tight">{t.title}</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">{t.title}</p>
               {t.description && (
-                <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">{t.description}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">{t.description}</p>
               )}
             </div>
             <button
               onClick={() => removeToast(t.id)}
-              className="text-slate-400 hover:text-white transition-colors shrink-0 p-0.5"
+              className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors shrink-0 p-0.5 cursor-pointer"
+              aria-label="Dismiss toast"
             >
               <X className="w-4 h-4" />
             </button>
